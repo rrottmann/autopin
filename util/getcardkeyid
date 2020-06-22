@@ -1,0 +1,3 @@
+#!/bin/bash
+keyid=` gpg -K | grep -B1 "Card serial" | head -1 | tr -d \ `
+echo $keyid

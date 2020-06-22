@@ -1,0 +1,3 @@
+#!/bin/bash
+serial=`gpg-connect-agent "scd serialno" /bye | grep ^S | cut -d ' ' -f3`
+echo $serial

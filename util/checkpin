@@ -1,0 +1,3 @@
+#!/bin/sh
+serialno=`gpg-connect-agent 'scd serialno' /bye | grep ^S | cut -d ' ' -f3`
+gpg-connect-agent "scd checkpin $serialno" /bye | grep -q OK

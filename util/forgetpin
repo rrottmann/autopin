@@ -1,0 +1,5 @@
+#!/bin/sh
+gpg-connect-agent "scd killscd" "scd bye" /bye 2>&1 >/dev/null
+gpg-connect-agent reloadagent /bye 2>&1 >/dev/null
+ssh-add -D 2>&1 >/dev/null
+ssh-agent -k 2>&1 >/dev/null

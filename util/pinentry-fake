@@ -1,0 +1,19 @@
+#!/bin/sh
+pin=`/usr/local/sbin/getpin`
+echo "OK Pleased to meet you"
+while read line
+do
+  line=`echo "$line"|tr '[A-Z]' '[a-z]'`
+  if [ "$line" == "getpin" ]; then
+    echo "D $pin"
+  fi
+  if [ "$line" == "bye" ]; then
+    echo "OK"
+    break
+  fi
+  if [ "$line" == "getinfo pid" ]; then
+    echo "D $BASHPID"
+  fi
+  echo "OK"
+done < /dev/stdin
+exit 0
