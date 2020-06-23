@@ -1,7 +1,7 @@
 #!/bin/bash
 # restart gpg-agent with custom pinentry-program
 gpg-connect-agent killagent /bye 2>&1 >/dev/null
-gpg-agent --daemon --pinentry-program /usr/local/sbin/pinentry-fake
+gpg-agent --daemon --enable-ssh-support --pinentry-program /usr/local/sbin/pinentry-fake
 # reset scd
 gpg-connect-agent "scd killscd" "scd bye" /bye 2>&1 >/dev/null
 gpg-connect-agent scd /bye 2>&1 >/dev/null
@@ -10,3 +10,7 @@ sleep 2
 serial=`gpg-connect-agent "scd serialno" /bye | grep ^S | cut -d ' ' -f3`
 # unlock card
 gpg-connect-agent "scd checkpin $serial" /bye 2>&1 >/dev/null
+unset SSH_AGENT_PID
+if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+  export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+fi
