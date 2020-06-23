@@ -1,2 +1,2 @@
 #!/bin/bash
-gpg-connect-agent 'scd random 10' /bye | sha256sum | tr -cd [:digit:] 
+gpg-connect-agent 'scd random 10' /bye | sha256sum | tr -cd [:digit:];echo
