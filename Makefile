@@ -19,8 +19,12 @@ install:
 	install -t /usr/local/sbin -m 700 -o root -g root util/autopin
 	install -t /usr/local/sbin -m 744 -o root -g root util/checkpin
 	install -t /usr/local/sbin -m 744 -o root -g root util/forgetpin
+	install -t /usr/local/sbin -m 744 -o root -g root util/gennonce
+	install -t /usr/local/sbin -m 744 -o root -g root util/gensecret
 	install -t /usr/local/sbin -m 744 -o root -g root util/getcardkeyid
 	install -t /usr/local/sbin -m 744 -o root -g root util/getcardserial
 	install -t /usr/local/sbin -m 744 -o root -g root util/forgetpin
 	install -t /usr/local/sbin -m 700 -o root -g root util/pinentry-fake
 	install -t /usr/local/sbin -m 700 -o root -g root util/reload-gpgagent
+	install -t /usr/local/sbin -m 700 -o root -g root util/sealdata
+	install -t /usr/local/sbin -m 700 -o root -g root util/unsealdata
