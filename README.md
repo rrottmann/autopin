@@ -10,9 +10,9 @@ MIT License. See separate document `LICENSE`.
 
 The source uses the following libraries:
 
-base64 -  by Joe DF (joedf@ahkscript.org) - MIT License
-hmac-sha256 - Copyright (C) 2017 Adrian Perez <aperez@igalia.com> - MIT License
-sha256 - Igor Pavlov - Public domain 
+* base64 -  by Joe DF (joedf@ahkscript.org) - MIT License
+* hmac-sha256 - Copyright (C) 2017 Adrian Perez <aperez@igalia.com> - MIT License
+* sha256 - Igor Pavlov - Public domain 
 
 ## Compile
 
@@ -39,17 +39,17 @@ sudo make install
 
 This also installs the following utils:
 
-* `autopin` - unlocks the security token automatically
-* `checkpin` - unlocks the security token manually
-* `forgetpin` - locks the security token
-*  gennonce - generate a nonce from trng data (sha256)
-*  gensecret - generate a secret from trng data (base64)
-* `getcardkeyid` - gets the keyid of the GPG key on token
-* `getcardserial` - gets the card serial of the token
-* `pinentry-fake` - is used for entering the pin
-* `reload-gpgagent` - reloads agents (e.g. when card hangs)
-*  sealdata - seal sensitive data to the secure element (encrypt)
-*  unsealdata - access sensitive data that has been sealed (decrypt)
+* autopin` - unlocks the security token automatically
+* checkpin` - unlocks the security token manually
+* forgetpin` - locks the security token
+* gennonce - generate a nonce from trng data (sha256)
+* gensecret - generate a secret from trng data (base64)
+* getcardkeyid` - gets the keyid of the GPG key on token
+* getcardserial` - gets the card serial of the token
+* pinentry-fake` - is used for entering the pin
+* reload-gpgagent` - reloads agents (e.g. when card hangs)
+* sealdata - seal sensitive data to the secure element (encrypt)
+* unsealdata - access sensitive data that has been sealed (decrypt)
 
 ## Security
 
