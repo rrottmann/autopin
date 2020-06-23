@@ -16,6 +16,7 @@ clean:
 
 install:
 	install -t /usr/local/sbin -m 700 -o root -g root getpin
+	install -t /usr/local/sbin -m 700 -o root -g root util/dice5
 	install -t /usr/local/sbin -m 700 -o root -g root util/autopin
 	install -t /usr/local/sbin -m 744 -o root -g root util/checkpin
 	install -t /usr/local/sbin -m 744 -o root -g root util/forgetpin

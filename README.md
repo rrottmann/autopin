@@ -41,6 +41,7 @@ This also installs the following utils:
 
 * `autopin` - unlocks the security token automatically
 * `checkpin` - unlocks the security token manually
+* `dice5` - roll 5 dice using trng data (usefule for diceware)
 * `forgetpin` - locks the security token
 * `gennonce` - generate a nonce from trng data (sha256)
 * `gensecret` - generate a secret from trng data (base64)
