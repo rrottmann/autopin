@@ -99,7 +99,7 @@ Gm2zr66n
 
 ## OpenPGP Card preparation
 
-0. gpg2 --card-edit`
+0. `gpg2 --card-edit`
 1. Factory Reset `admin -> factory-reset`
 2. Change ADMIN PIN `admin -> passwd-> 3`
 3. Generate new key `admin -> generate`
