@@ -198,7 +198,7 @@ gpg: decryption failed: No secret key
 ```bash
 # gensecret
 RCCJPnqbahi6pSot2zvQCIx8YCUwRP2w51B/gsuHopJe85efCk9LCg==
-bash
+```
 
 ### Seal and unseal data
 
