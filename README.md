@@ -6,9 +6,17 @@ Automatic pinentry to gpg. Useful to unlock a secure element like an OpenPGP car
 
 MIT License. See separate document `LICENSE`.
 
+### Used Libraries
+
+The source uses the following libraries:
+
+base64 -  by Joe DF (joedf@ahkscript.org) - MIT License
+hmac-sha256 - Copyright (C) 2017 Adrian Perez <aperez@igalia.com> - MIT License
+sha256 - Igor Pavlov - Public domain 
+
 ## Compile
 
-The following command may be used to compile autopin on Debian 10:
+The following commands may be used to compile autopin on Debian 10:
 
 ```bash
 apt-get update
@@ -34,10 +42,14 @@ This also installs the following utils:
 * `autopin` - unlocks the security token automatically
 * `checkpin` - unlocks the security token manually
 * `forgetpin` - locks the security token
+*  gennonce - generate a nonce from trng data (sha256)
+*  gensecret - generate a secret from trng data (base64)
 * `getcardkeyid` - gets the keyid of the GPG key on token
 * `getcardserial` - gets the card serial of the token
 * `pinentry-fake` - is used for entering the pin
 * `reload-gpgagent` - reloads agents (e.g. when card hangs)
+*  sealdata - seal sensitive data to the secure element (encrypt)
+*  unsealdata - access sensitive data that has been sealed (decrypt)
 
 ## Security
 
@@ -87,10 +99,10 @@ Gm2zr66n
 
 ## OpenPGP Card preparation
 
-0. `gpg2 --card-edit`
+0. gpg2 --card-edit`
 1. Factory Reset `admin -> factory-reset`
-2. Change ADMIN PIN `admin -> passwd-> 2`
-3. Generate certificate `admin -> generate`
+2. Change ADMIN PIN `admin -> passwd-> 3`
+3. Generate new key `admin -> generate`
 4. Create RESET CODE `admin -> passwd -> 4`
 5. Change USER PIN `passwd`
 
@@ -172,3 +184,56 @@ gpg: encrypted with 2048-bit RSA key, ID 6EBACB92B9127517, created 2020-06-21
 gpg: public key decryption failed: Operation cancelled
 gpg: decryption failed: No secret key
 ```
+## Other usage examples
+
+### Generate nonce
+
+```bash
+# gennonce
+26572734721428444495398020545927618012015
+```
+
+### Generate secret
+
+```bash
+# gensecret
+RCCJPnqbahi6pSot2zvQCIx8YCUwRP2w51B/gsuHopJe85efCk9LCg==
+bash
+
+### Seal and unseal data
+
+```bash
+# echo abc | sealdata
+-----BEGIN PGP MESSAGE-----
+
+hQEMA/UOEOh5tLUDAQf8DGvu8rmujRac1tq4AzHMYWLie6F4ISKBneT6rgCvgNJY
+cu31u8AaTH43ua8aMC2g7hpUVtuaJ9R2LXPVfyptbuVs+jNtB1FBUAdsiNoyQ9Tl
+hNd1qa4T+hlKuzU3dXScuqLZrFwdRUlixHFun4XAbTjGZwhUIYPQA9T7OvDzz8dW
+oQ2AjccGiKJsT8qaPjkIYTdsOGE29cRjyuCk5VPS0YaLAnwiVyWeG3g5Q+OHSaV4
+IV6wR084liApUIoJMx+fYxGWVVEF/QQlX9dALLBQ0GMkZwygliHtJoVsQl3uQrqe
+CxvV7KdFLfl6sZ8pYrJIops75wiudTsL5jpFxhoOmNI/AcLvEPM76arGvRmZU3Rc
+b6RFKCqyE/nyVSMOHa0b5oNuPXISsE3qvqZFHlz7j3zkO7L3yvmTLU7Clt4za+ce
+=dqD9
+-----END PGP MESSAGE-----
+# echo abc | sealdata > /dev/shm/sealed.dat
+# cat /dev/shm/sealed.dat | unsealdata
+abc
+# echo abc | sealdata | unsealdata
+abc
+# gensecret | sealdata
+-----BEGIN PGP MESSAGE-----
+
+hQEMA/UOEOh5tLUDAQf/aekBH2z5MlDd/CSuJFtiAQAuqKJJyJytDMwavuY9kflC
+Q88YJtc6cwFK/1bEDQ1O26UJpAUYRHNODgCQS+PboCQrb1rPLThPnyBN1q7ERBL7
+8fpr1oPGzjeexxu5KIyKAfeBAQuYL6l2cc3mZsNGwaFYrBK21UOmG8NBpl4VnbMT
+SW345gPCRtNRe7LHHbbGjJP8uqVOYVin8dE8qvlgPt69pmNuBGVM1gJwjU3Acy3s
+MadHuL6B03VwaiHlqJRfTXf/u0euxAPyEIf7mCVkWemOYF9KEZrLruZyjNa0yzPZ
+isoR0D8VZRa5rovwZFm555vL19gAIMbfj/OxKXjECNJwAS4O4IGyRpS87xM7NpOR
+WExFDKlQLO7eE9Syx+q3347lShrBf42Gp5Ymj/VJ2l7/Zxpy9Mu/0MLtw+lgO5df
+EteAYWXx6fH4IS7L234BFNCBMokxniC6SZnqcYpOs00Pz3C7Oaika5aP5KYrANQ1
+JA==
+=MRL6
+-----END PGP MESSAGE-----
+```
+
+
