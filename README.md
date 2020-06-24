@@ -79,7 +79,7 @@ For some systems, like a backup server, this may not be an attack vector to
 protect against and the need to automate the unlock process is more important.
 To make this process simple, I have created autopin.
 
-### Thread Model
+### Threat Model
 
 A hacker might get access to the OS and key material should be protected
 by the presence of an OpenPGP compliant security token. Key material should
@@ -101,7 +101,7 @@ binary in order to create more diverse pins.
 This is just to protect against a stolen/removed key where the attacker had
 no possibility to break into the system to execute `/usr/local/sbin/getpin`.
 
-!!THIS IS NO REAL SECURITY! SEE ABOVE SECTION!!!
+See the threat model in above section.
 
 ## Prepare system
 
@@ -131,6 +131,16 @@ Gm2zr66n
 3. Generate new key `admin -> generate`
 4. Create RESET CODE `admin -> passwd -> 4`
 5. Change USER PIN `passwd`
+
+If you just use the USER PIN and do not generate a RESET CODE and
+block the ADMIN PIN with 3 wrong password entries, the OpenPGP card
+needs to be factory reset when the USER PIN entries get exhausted.
+
+*Please note:* Not all OpenPGP implementations feature a factory reset
+(in oder to rendet  the value of the card to zero in case of theft/loss)!
+
+*Please further note:* The OpenPGP card does not hold enough information
+to recreate the public RSA key. So you need to backup it!
 
 ## Automatic PIN entry Example - with debug output
 
