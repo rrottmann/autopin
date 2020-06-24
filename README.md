@@ -82,12 +82,13 @@ To make this process simple, I have created autopin.
 ### Thread Model
 
 A hacker might get access to the OS and key material should be protected
-by the presence of an OpenGPG compliant security token. Key material should
+by the presence of an OpenPGP compliant security token. Key material should
 therefore be encrypted when not in use. Only the root account should unseal
 secrets and work with them in a session where the security token is present.
 When automation is used, the server and token are protected against access.
 No access from the internet. The token is only used for a specific purpose:
-Cheap mans HSM in a locked cabinet.
+Cheap mans HSM in a locked cabinet. When physical access is not secured,
+the token remains with the admin when not in use.
 
 ## Usage
 
