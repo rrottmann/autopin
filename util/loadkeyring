@@ -1,0 +1,7 @@
+#!/bin/bash
+in=${!:--}
+cat "$in" | while read line; do
+  desc="`echo $line | cut -d\; -f 1`"
+  secret="`echo $line | cut -d\; -f 2-`"
+  keyctl add user "$desc" "$secret" @u
+done

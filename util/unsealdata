@@ -1,3 +1,4 @@
 #!/bin/bash
-out=${1:--}
-gpg --decrypt --output $out 2>/dev/null
+in=${1:--}
+out=${2:--}
+gpg --output "$out" --decrypt "$in" 2>/dev/null

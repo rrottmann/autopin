@@ -1,6 +1,7 @@
 # Autopin
 
-Automatic pinentry to gpg. Useful to unlock a secure element like an OpenPGP card.
+Automatic pinentry to gpg. Useful to unlock a secure element like an OpenPGP card
+(e.g. Fellowship Smartcard, Gnuk Token, Yubikey).
 
 ## License
 
@@ -39,18 +40,31 @@ sudo make install
 
 This also installs the following utils:
 
+* `addsecret` - creates a random secret in the kernel user keyring
 * `autopin` - unlocks the security token automatically
 * `checkpin` - unlocks the security token manually
-* `dice5` - roll 5 dice using trng data (usefule for diceware)
+* `clearkeyring` - clears all keys from kernel user keyring
+* `dice5` - roll 5 dice using trng data (useful for diceware)
+* `dumpkeyring` - creates csv dump of the kernel user keyring
 * `forgetpin` - locks the security token
+* `forgetsecret` - removes a secret from kernel user keyring
 * `gennonce` - generate a nonce from trng data (sha256)
 * `gensecret` - generate a secret from trng data (base64)
+* `getsecret` - gets a secret from kernel user keyring
 * `getcardkeyid` - gets the keyid of the GPG key on token
 * `getcardserial` - gets the card serial of the token
+* `loadkeyring` - loads a previous csv dump in the kernel user keyring
 * `pinentry-fake` - is used for entering the pin
 * `reload-gpgagent` - reloads agents (e.g. when card hangs)
 * `sealdata` - seal sensitive data to the secure element (encrypt)
 * `unsealdata` - access sensitive data that has been sealed (decrypt)
+
+Even advanced users that know gpg and keyctl by heart might find these
+utils helpful as they provide a convenient shortcut for day to day use.
+
+The utils will be improved over times when they behave in a strange way.
+They are not using sophisticated error handling and are basically shell
+hacks and snippets that I found interesting enough to save as a script.
 
 ## Security
 
@@ -81,7 +95,7 @@ no possibility to break into the system to execute `/usr/local/sbin/getpin`.
 ## Prepare system
 
 ```bash
-apt-get install gnupg2 scdaemon -y
+apt-get install gnupg2 scdaemon keyutils -y
 ``` 
 
 ## Get the unique pin for this system
@@ -237,4 +251,98 @@ JA==
 -----END PGP MESSAGE-----
 ```
 
+### Roll 5 dices
 
+This is useful for generating 5 dice throws from TRNG data.
+It may be used with a diceware dictionary to generate easy
+to remember but secure passphrases
+
+```bash
+# dice5
+61525
+```
+
+### Dump and Load Kernel Keyring
+
+The kernel keyring does not store key entries after reboot
+and may also expire keys from time to time.
+
+In order to preserve them, they can be dumped and encrypted
+using the OpenPGP card.
+
+Later, the keys may be loaded again.
+
+```bash
+# clearkeyring
+# keyctl list @u
+keyring is empty
+# addkey foo
+208415637
+# addkey bar
+834132960
+# addkey baz
+453959846
+# dumpkeyring 
+foo;RCBYmyCIQp9Qw6xx4x0IREQ7g3R1n/55AQ+xpc2MsnDMhQpPSwo=
+baz;RCC6057Tu5shWcB8cLvu4imYjT5mIyyRXizmVBSyDD7zogpPSwo=
+bar;RCDZ0lxWXE4bCy0AdQinRttywF2suPSeKp1sTc1NYTJvQwpPSwo=
+# dumpkeyring | sealdata /dev/shm/sealed.dat
+# cat /dev/shm/sealed.dat 
+-----BEGIN PGP MESSAGE-----
+
+hQEMA/UOEOh5tLUDAQgAn3lhG2cJb6P5of7sM5XI+eO7yQAxSf1eKp/+3MbVaRg6
+piezrLZ4SU5wQCJbzJecsTS1q3vKARNYAdKBzV/sO8AjZSUTFA1djMGUDKaLeXhV
+epZkDVplMqvSuygLFSWAVy0Hpl0pqPeTpHU1K118JoBaQnxuy64n9sWBDPzilsfD
+LeqRQvIhfsua80QGaqcQIStgLIIj3PDmw4cExlq4nHlkYyFGVEQtdhwLjqmVz0e1
+5GpYVLy9f4VN8lxl3CWo1zrjzP7cluODIJWkFuHj9D1ngs92GrsEMsnppSGPXw5i
+YoK5QGR+lY+V9boOtDPLN1gr/wqx+0QwEgxiMmRpCtLAGAFWUOcn3j+MGqrd7LS7
+/McYNMO29XXre0FdJEL7NS6uRKuTzkCtR5HcnTywnu/TrPxrKC+w5L34GTfEzigG
+y6+pKjyyiWRsqMeRN2L1zZNh8+fP33YajhJ0qiBvYRADaJPSWMM7TkRGSd+zE+dg
+5BTTrk4bToOpyb2qjXXfDo+jePvQPH1JHekwrCsoNTM9jF3NLKdoxQkep4XdVrkf
+7XA1FGNo92R/5CC2pl0G+Qxu0O8gxn1sJfba7HKwm3fld1CU1FGVV+Qrx2VfTh29
+6KQWc1l9eoYT7A==
+=SNAB
+-----END PGP MESSAGE-----
+# clearkeyring
+# keyctl list @u
+keyring is empty
+# autopin
+# unsealdata /dev/shm/sealed.dat
+foo;RCBYmyCIQp9Qw6xx4x0IREQ7g3R1n/55AQ+xpc2MsnDMhQpPSwo=
+baz;RCC6057Tu5shWcB8cLvu4imYjT5mIyyRXizmVBSyDD7zogpPSwo=
+bar;RCDZ0lxWXE4bCy0AdQinRttywF2suPSeKp1sTc1NYTJvQwpPSwo=
+# unsealdata /dev/shm.sealed.dat | loadkeyring
+289946937
+182106117
+27723911
+# keyctl list @u
+3 keys in keyring:
+289946937: --alswrv     0     0 user: foo
+182106117: --alswrv     0     0 user: bar
+ 27723911: --alswrv     0     0 user: baz
+```
+
+### Create, Retrieve and Forget Secrets
+
+The following commands show how to easily create, retrieve and forget
+ephemeral secrets in the kernel user keyring. 
+
+Of course, you may dump and seal them away. See previous section.
+
+```bash
+root@nas:~/root/git/autopin# clearkeyring 
+root@nas:~/root/git/autopin# keyctl list @u
+keyring is empty
+root@nas:~/root/git/autopin# addsecret test
+904805390
+root@nas:~/root/git/autopin# keyctl list @u
+1 key in keyring:
+904805390: --alswrv     0     0 user: test
+root@nas:~/root/git/autopin# getsecret test
+RCBAxGS05Qlz/sEacv7M7zhybriwMUAO8tVdU8pK3+clMjWnCk9LCg==
+root@nas:~/root/git/autopin# forgetsecret test
+1 links removed
+
+root@nas:~/root/git/autopin# keyctl list @u
+keyring is empty
+```

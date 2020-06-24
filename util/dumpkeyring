@@ -1,0 +1,6 @@
+#!/bin/bash
+keyctl list @u | grep -E "^[0-9]*:" | awk '{print $6}' | while read key; do
+  keyid=`keyctl search @u user $key`
+  secret="`keyctl pipe $keyid`"
+  echo "$key;$secret"
+done

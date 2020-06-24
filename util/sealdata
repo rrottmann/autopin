@@ -1,4 +1,4 @@
 #!/bin/bash
 out=${1:--}
 keyid=`getcardkeyid`
-gpg --encrypt --armor --recipient $keyid --output $out 2>/dev/null
+gpg --encrypt --armor --recipient $keyid --output $out #2>/dev/null
