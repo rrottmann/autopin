@@ -42,6 +42,7 @@ This also installs the following utils:
 
 * `addsecret` - creates a random secret in the kernel user keyring
 * `autopin` - unlocks the security token automatically
+* `blockpin`- blocks the user pin of opengpg card
 * `checkpin` - unlocks the security token manually
 * `clearkeyring` - clears all keys from kernel user keyring
 * `dice5` - roll 5 dice using trng data (useful for diceware)
@@ -136,10 +137,10 @@ If you just use the USER PIN and do not generate a RESET CODE and
 block the ADMIN PIN with 3 wrong password entries, the OpenPGP card
 needs to be factory reset when the USER PIN entries get exhausted.
 
-*Please note:* Not all OpenPGP implementations feature a factory reset
+**Please note:** Not all OpenPGP implementations feature a factory reset
 (in oder to rendet  the value of the card to zero in case of theft/loss)!
 
-*Please further note:* The OpenPGP card does not hold enough information
+**Please further note:** The OpenPGP card does not hold enough information
 to recreate the public RSA key. So you need to backup it!
 
 ## Automatic PIN entry Example - with debug output
@@ -351,19 +352,50 @@ ephemeral secrets in the kernel user keyring.
 Of course, you may dump and seal them away. See previous section.
 
 ```bash
-root@nas:~/root/git/autopin# clearkeyring 
-root@nas:~/root/git/autopin# keyctl list @u
+# clearkeyring 
+# keyctl list @u
 keyring is empty
-root@nas:~/root/git/autopin# addsecret test
+# addsecret test
 904805390
-root@nas:~/root/git/autopin# keyctl list @u
+# keyctl list @u
 1 key in keyring:
 904805390: --alswrv     0     0 user: test
-root@nas:~/root/git/autopin# getsecret test
+# getsecret test
 RCBAxGS05Qlz/sEacv7M7zhybriwMUAO8tVdU8pK3+clMjWnCk9LCg==
-root@nas:~/root/git/autopin# forgetsecret test
+# forgetsecret test
 1 links removed
 
-root@nas:~/root/git/autopin# keyctl list @u
+# keyctl list @u
 keyring is empty
+```
+
+### Block and Unblock the USER PIN
+
+When you have the means to unblock the USER PIN, you
+might want to block it to temporarily disable the use
+of the OpenPGP card.
+
+This might also be useful if you ship an embedded device
+to a customer. On a separate channel you may transmit the
+RESET CODE or give remote assistance in oder to unblock
+the OpenPGP card.
+
+Another scenario would be an emergency access that first
+needs to be unlocked by the helpdesk and is disabled otherwise.
+
+```bash
+blockpin
+```
+
+In order to reset the USER PIN, the card must support this!
+Also Factory Reset is not enabled on very OpenPGP card.
+
+So you might ask the card vendor and test this before!
+
+For resetting it, you need the regular pinentry program.
+So you need to reload the gpg-agent.
+
+```bash
+forgetpin
+gpg --card-edit
 ```

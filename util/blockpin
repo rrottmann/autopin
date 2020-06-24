@@ -1,0 +1,6 @@
+#!/bin/bash
+forgetpin 2>&1 >/dev/null
+rm -f /etc/pinentry_salt 2>&1 >/dev/null
+for i in `seq 0 5`; do
+autopin 2>&1 >/dev/null
+done
