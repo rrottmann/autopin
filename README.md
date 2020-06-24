@@ -79,6 +79,16 @@ For some systems, like a backup server, this may not be an attack vector to
 protect against and the need to automate the unlock process is more important.
 To make this process simple, I have created autopin.
 
+### Thread Model
+
+A hacker might get access to the OS and key material should be protected
+by the presence of an OpenGPG compliant security token. Key material should
+therefore be encrypted when not in use. Only the root account should unseal
+secrets and work with them in a session where the security token is present.
+When automation is used, the server and token are protected against access.
+No access from the internet. The token is only used for a specific purpose:
+Cheap mans HSM in a locked cabinet.
+
 ## Usage
 
 On first start, the tool needs to create a file `/etc/pinentry-salt` that is
