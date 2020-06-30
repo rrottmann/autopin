@@ -56,6 +56,7 @@ This also installs the following utils:
 * `getsecret` - gets a secret from kernel user keyring
 * `getcardkeyid` - gets the keyid of the GPG key on token
 * `getcardserial` - gets the card serial of the token
+* `gpg2ssh` - add gpg keys to ssh authentication agent
 * `loadkeyring` - loads a previous csv dump in the kernel user keyring
 * `pinentry-fake` - is used for entering the pin
 * `reload-gpgagent` - reloads agents (e.g. when card hangs)

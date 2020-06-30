@@ -32,6 +32,7 @@ install:
 	install -t /usr/local/sbin -m 744 -o root -g root util/getsecret
 	install -t /usr/local/sbin -m 744 -o root -g root util/getcardkeyid
 	install -t /usr/local/sbin -m 744 -o root -g root util/getcardserial
+	install -t /usr/local/sbin -m 744 -o root -g root util/gpg2ssh
 	install -t /usr/local/sbin -m 700 -o root -g root util/loadkeyring
 	install -t /usr/local/sbin -m 744 -o root -g root util/forgetpin
 	install -t /usr/local/sbin -m 700 -o root -g root util/pinentry-fake
