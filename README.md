@@ -44,6 +44,8 @@ This also installs the following utils:
 * `autopin` - unlocks the security token automatically
 * `blockpin`- blocks the user pin of opengpg card
 * `checkpin` - unlocks the security token manually
+* `counter-inc` - increase a monotonic counter
+* `counter-read` - read a monotonic counter
 * `clearkeyring` - clears all keys from kernel user keyring
 * `dice5` - roll 5 dice using trng data (useful for diceware)
 * `dumpkeyring` - creates csv dump of the kernel user keyring
@@ -399,3 +401,31 @@ So you need to reload the gpg-agent.
 forgetpin
 gpg --card-edit
 ```
+
+### Read and Increase a Counter
+
+An OpenPGP card posesses an signature counter that can be
+repurposed as a strictly monotone counter.
+
+```bash
+# counter-read
+6
+# counter-inc
+# counter-read
+7
+# counter-inc
+# counter-read
+9
+```
+
+**Please note:** The counter-inc just makes sure that the
+signature counter increases. Other operations happening between
+`counter-read` commands may also increase the counter.
+
+Such counters may be useful to prevent rollback or replay attacks.
+
+As the counter is backed by a regular EEPROM, you may not expect
+durability as with counters on a dedicated security element.
+
+The speed is also not that good as basically some random data
+gets signed in the background.

@@ -1,0 +1,3 @@
+#!/bin/bash
+counter=`gpg --card-status --no-tty| grep -oP "^Signature\ counter : \K\d+$"`
+echo $counter
